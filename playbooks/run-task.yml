@@ -1,0 +1,10 @@
+---
+- name: Local event-driven-ansible test
+  hosts: localhost
+  tasks:
+    - name: Print Jira event
+      ansible.builtin.debug:
+        msg: "{{ ansible_eda.event.payload }}"
+    - name: Resolve issue from webhook event
+      ansible.builtin.debug:
+        msg: "Process issue {{ ansible_eda.event.payload.issue.key }}"

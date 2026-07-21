@@ -1,0 +1,36 @@
+### REQUIRED
+namespace: jira
+
+name: event_driven_ansible
+
+version: 1.0.0
+
+readme: README.md
+
+authors:
+  - Ansible Community
+
+### OPTIONAL but strongly recommended
+description: |
+  Event source plugins for Jira that integrate with Ansible Event-Driven Automation.
+  The jira_webhook plugin receives webhook events from Jira Cloud or Data Center.
+  The jira_jql plugin polls Jira for issues matching a JQL query.
+
+license:
+  - Apache-2.0
+
+tags: [jira, eda, atlassian, tools, cloud]
+
+dependencies: {}
+
+repository: https://github.com/example/eda-jira
+
+documentation: https://github.com/example/eda-jira/blob/main/README.md
+
+homepage: https://www.atlassian.com/software/jira
+
+issues: https://github.com/example/eda-jira/issues
+
+build_ignore:
+  - '*.github'
+  - 'tox.ini'

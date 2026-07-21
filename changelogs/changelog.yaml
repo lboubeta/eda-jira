@@ -1,0 +1,9 @@
+ancestor: null
+releases:
+  1.0.0:
+    changes:
+      minor_changes:
+        - Initial release of Jira Event-Driven Ansible source plugins.
+    fragments:
+      - initial-release.yml
+    release_date: '2026-07-21'

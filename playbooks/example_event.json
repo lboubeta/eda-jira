@@ -1,0 +1,43 @@
+{
+  "timestamp": 1606480436302,
+  "webhookEvent": "jira:issue_updated",
+  "issue_event_type_name": "issue_generic",
+  "user": {
+    "accountId": "abc123",
+    "displayName": "Jane Smith",
+    "active": true
+  },
+  "issue": {
+    "id": "10042",
+    "key": "OPS-123",
+    "fields": {
+      "summary": "Fix login timeout bug",
+      "status": {
+        "id": "3",
+        "name": "In Progress"
+      },
+      "priority": {
+        "id": "2",
+        "name": "High"
+      },
+      "project": {
+        "id": "10000",
+        "key": "OPS",
+        "name": "Operations"
+      }
+    }
+  },
+  "changelog": {
+    "id": "10124",
+    "items": [
+      {
+        "field": "status",
+        "fieldtype": "jira",
+        "from": "10000",
+        "fromString": "To Do",
+        "to": "3",
+        "toString": "In Progress"
+      }
+    ]
+  }
+}
