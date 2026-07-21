@@ -79,9 +79,33 @@ The `jira_jql` plugin polls Jira on a configurable interval and sends matching i
 
 ## Decision environment
 
-Install this collection in a custom decision environment on the EDA Controller. For webhook-based integrations, you can also use AAP Event Streams with the built-in `eda.builtin.webhook` source if you prefer managed webhook infrastructure.
+This collection includes a custom decision environment definition in `decision-environment/` for Ansible Builder.
 
-See the [Event-Driven Ansible decision environments guide](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/html/using_automation_decisions/eda-decision-environments) for setup details.
+### Build
+
+```bash
+pip install ansible-builder
+./decision-environment/build.sh jira-eda-de:latest
+```
+
+For open source environments without access to the Red Hat `de-minimal` image:
+
+```bash
+DEFINITION=decision-environment/execution-environment-oss.yml \
+  ./decision-environment/build.sh jira-eda-de-oss:latest
+```
+
+### Use in AAP
+
+1. Push the built image to your container registry.
+2. Create a decision environment in **Automation Decisions** > **Decision Environments**.
+3. Assign that decision environment to your rulebook activation.
+
+See [docs/decision_environment.md](docs/decision_environment.md) for full build and test instructions.
+
+For webhook-based integrations, you can also use AAP Event Streams with the built-in `eda.builtin.webhook` source if you prefer managed webhook infrastructure.
+
+See the [Event-Driven Ansible decision environments guide](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/html/using_automation_decisions/eda-decision-environments) for platform setup details.
 
 ## Local testing
 
