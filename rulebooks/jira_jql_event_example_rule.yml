@@ -3,16 +3,15 @@
   hosts: all
   sources:
     - redhat_iberia.eda.jira_jql:
-        jira_url: "https://example.atlassian.net"
-        jira_user: "automation@example.com"
+        jira_url: "https://lboubeta.atlassian.net"
+        jira_user: "lboubeta@redhat.com"
         jira_token: '{{ jira_api_token }}'
-        jql: 'project = OPS AND issuetype = Bug AND status = "To Do"'
+        jql: 'project = ansible AND status != "To Do"'
         delay: 60
 
   rules:
     - name: Auto-assign highest priority bugs
       condition: event.fields.priority.name == "Highest"
       action:
-        run_job_template:
-          name: "Assign critical bug"
-          organization: "Default"
+        debug:
+          msg: "Highest priority bug found: {{ event.fields.summary }}"
