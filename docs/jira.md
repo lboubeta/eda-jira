@@ -1,6 +1,6 @@
-# Event-source plugin jira_webhook
+# Event-source plugin jira
 
-The `jira_webhook` event-source plugin receives webhook events from Jira Cloud or Jira Data Center. Admin webhooks can be secured with an HMAC shared secret (`X-Hub-Signature` header). OAuth 2.0 app webhooks can be secured with Bearer token authentication.
+The `redhat_iberia.eda.jira` event-source plugin receives webhook events from Jira Cloud or Jira Data Center. Admin webhooks can be secured with an HMAC shared secret (`X-Hub-Signature` header). OAuth 2.0 app webhooks can be secured with Bearer token authentication.
 
 ## Run tox locally to check linting
 
@@ -29,7 +29,7 @@ Run integration tests:
 pytest tests/integration/
 ```
 
-## Test jira_webhook locally with ansible-rulebook
+## Test jira locally with ansible-rulebook
 
 ### Python requirements
 
@@ -54,7 +54,7 @@ jira_webhook_secret: <your-test-secret>
 
 ```bash
 ansible-rulebook \
-  --rulebook rulebooks/jira_webhook_event_example_rule.yml \
+  --rulebook rulebooks/jira_event_example_rule.yml \
   -e rulebooks/vars.yml \
   -i inventory.yml \
   -S extensions/eda/plugins/event_source/

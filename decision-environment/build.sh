@@ -4,7 +4,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
-IMAGE_TAG="${1:-jira-eda-de:latest}"
+IMAGE_TAG="${1:-redhat-iberia-eda-de:latest}"
 DEFINITION="${DEFINITION:-${SCRIPT_DIR}/execution-environment.yml}"
 
 if ! command -v ansible-builder >/dev/null 2>&1; then

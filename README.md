@@ -1,13 +1,15 @@
 # Jira + Red Hat Event Driven Ansible
 
+Collection FQCN: `redhat_iberia.eda`
+
 This collection contains Event-Driven Ansible source plugins for Jira:
 
-- `jira_webhook` — receive webhook events from Jira Cloud or Jira Data Center
-- `jira_jql` — poll Jira for issues matching a JQL query
+- `redhat_iberia.eda.jira` — receive webhook events from Jira Cloud or Jira Data Center
+- `redhat_iberia.eda.jira_jql` — poll Jira for issues matching a JQL query
 
-## Webhook events (`jira_webhook`)
+## Webhook events (`jira`)
 
-The `jira_webhook` plugin listens for HTTP POST requests from Jira webhooks and forwards the JSON payload to your rulebook.
+The `jira` plugin listens for HTTP POST requests from Jira webhooks and forwards the JSON payload to your rulebook.
 
 ### Requirements
 
@@ -27,7 +29,7 @@ The `jira_webhook` plugin listens for HTTP POST requests from Jira webhooks and 
 - name: Listen for Jira webhook events
   hosts: all
   sources:
-    - jira.event_driven_ansible.jira_webhook:
+    - redhat_iberia.eda.jira:
         host: 0.0.0.0
         port: 5000
         path: /webhook
@@ -61,7 +63,7 @@ The `jira_jql` plugin polls Jira on a configurable interval and sends matching i
 - name: Poll Jira for open bugs
   hosts: all
   sources:
-    - jira.event_driven_ansible.jira_jql:
+    - redhat_iberia.eda.jira_jql:
         jira_url: "https://example.atlassian.net"
         jira_user: "automation@example.com"
         jira_token: '{{ jira_api_token }}'
@@ -85,14 +87,14 @@ This collection includes a custom decision environment definition in `decision-e
 
 ```bash
 pip install ansible-builder
-./decision-environment/build.sh jira-eda-de:latest
+./decision-environment/build.sh redhat-iberia-eda-de:latest
 ```
 
 For open source environments without access to the Red Hat `de-minimal` image:
 
 ```bash
 DEFINITION=decision-environment/execution-environment-oss.yml \
-  ./decision-environment/build.sh jira-eda-de-oss:latest
+  ./decision-environment/build.sh redhat-iberia-eda-de-oss:latest
 ```
 
 ### Use in AAP
@@ -109,7 +111,7 @@ See the [Event-Driven Ansible decision environments guide](https://docs.redhat.c
 
 ## Local testing
 
-See [docs/jira_webhook.md](docs/jira_webhook.md) for local `ansible-rulebook` testing instructions.
+See [docs/jira.md](docs/jira.md) for local `ansible-rulebook` testing instructions.
 
 ## Licensing
 

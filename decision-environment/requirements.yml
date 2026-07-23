@@ -3,6 +3,6 @@
 # the local collection source in execution-environment.yml:
 #
 # collections:
-#   - name: jira.event_driven_ansible
+#   - name: redhat_iberia.eda
 #     version: ">=1.0.0"
 collections: []

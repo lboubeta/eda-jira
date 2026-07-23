@@ -49,7 +49,7 @@ EXAMPLES = r"""
 - name: Poll Jira for newly created bugs
   hosts: all
   sources:
-    - jira.event_driven_ansible.jira_jql:
+    - redhat_iberia.eda.jira_jql:
         jira_url: "https://example.atlassian.net"
         jira_user: "automation@example.com"
         jira_token: "{{ jira_api_token }}"

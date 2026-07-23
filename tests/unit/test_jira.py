@@ -1,4 +1,4 @@
-"""Unit tests for jira_webhook.py."""
+"""Unit tests for jira.py."""
 # pylint: disable-next=import-error
 import hashlib
 import hmac
@@ -6,7 +6,7 @@ import hmac
 import pytest
 from aiohttp import web
 
-from extensions.eda.plugins.event_source.jira_webhook import (
+from extensions.eda.plugins.event_source.jira import (
     _parse_auth_header,
     _set_app_attributes,
     _verify_hmac_signature,

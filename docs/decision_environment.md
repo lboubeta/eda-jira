@@ -1,6 +1,6 @@
-# Decision environment for jira.event_driven_ansible
+# Decision environment for redhat_iberia.eda
 
-This directory contains Ansible Builder definitions for a custom Event-Driven Ansible decision environment that includes the `jira.event_driven_ansible` collection.
+This directory contains Ansible Builder definitions for a custom Event-Driven Ansible decision environment that includes the `redhat_iberia.eda` collection.
 
 ## Prerequisites
 
@@ -21,11 +21,11 @@ From the repository root:
 
 ```bash
 # AAP / de-minimal base image
-./decision-environment/build.sh jira-eda-de:latest
+./decision-environment/build.sh redhat-iberia-eda-de:latest
 
 # Open source base image (quay.io/ansible/ansible-rulebook)
 DEFINITION=decision-environment/execution-environment-oss.yml \
-  ./decision-environment/build.sh jira-eda-de-oss:latest
+  ./decision-environment/build.sh redhat-iberia-eda-de-oss:latest
 ```
 
 Or run ansible-builder directly:
@@ -34,7 +34,7 @@ Or run ansible-builder directly:
 ansible-builder build \
   -f decision-environment/execution-environment.yml \
   -c . \
-  -t jira-eda-de:latest
+  -t redhat-iberia-eda-de:latest
 ```
 
 ## Use the image in Ansible Automation Platform
@@ -48,7 +48,7 @@ Example rulebook activation source:
 
 ```yaml
 sources:
-  - jira.event_driven_ansible.jira_webhook:
+  - redhat_iberia.eda.jira:
       host: 0.0.0.0
       port: 5000
       path: /webhook
@@ -61,9 +61,9 @@ sources:
 podman run --rm -it \
   -v "$(pwd)/inventory.yml:/tmp/inventory.yml:Z" \
   -v "$(pwd)/rulebooks:/tmp/rulebooks:Z" \
-  jira-eda-de:latest \
+  redhat-iberia-eda-de:latest \
   ansible-rulebook \
-    --rulebook /tmp/rulebooks/jira_webhook_event_example_rule.yml \
+    --rulebook /tmp/rulebooks/jira_event_example_rule.yml \
     -i /tmp/inventory.yml \
     -e jira_webhook_secret=test-secret
 ```

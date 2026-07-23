@@ -1,36 +1,67 @@
 ### REQUIRED
-namespace: jira
+# The namespace of the collection. This can be a company/brand/organization or product name under which all
+# content lives. May only contain alphanumeric lowercase characters and underscores. Namespaces cannot start with
+# underscores or numbers and cannot contain consecutive underscores
+namespace: redhat_iberia
 
-name: event_driven_ansible
+# The name of the collection. Has the same character restrictions as 'namespace'
+name: eda
 
+# The version of the collection. Must be compatible with semantic versioning
 version: 1.0.0
 
+# The path to the Markdown (.md) readme file. This path is relative to the root of the collection
 readme: README.md
 
+# A list of the collection's content authors. Can be just the name or in the format 'Full Name <email> (url)
+# @nicks:irc/im.site#channel'
 authors:
-  - Ansible Community
+  - Red Hat Iberia
+
 
 ### OPTIONAL but strongly recommended
+# A short summary description of the collection
 description: |
   Event source plugins for Jira that integrate with Ansible Event-Driven Automation.
-  The jira_webhook plugin receives webhook events from Jira Cloud or Data Center.
+  The jira plugin receives webhook events from Jira Cloud or Data Center.
   The jira_jql plugin polls Jira for issues matching a JQL query.
 
+# Either a single license or a list of licenses for content inside of a collection. Ansible Galaxy currently only
+# accepts L(SPDX,https://spdx.org/licenses/) licenses. This key is mutually exclusive with 'license_file'
 license:
   - Apache-2.0
 
+# Must also include one of the following: application, cloud, database, infrastructure, linux, monitoring, networking, security, storage,  tools, windows
 tags: [jira, eda, atlassian, tools, cloud]
 
+# Collections that this collection requires to be installed for it to be usable. The key of the dict is the
+# collection label 'namespace.name'. The value is a version range
+# L(specifiers,https://python-semanticversion.readthedocs.io/en/latest/#requirement-specification). Multiple version
+# range specifiers can be set and are separated by ','
 dependencies: {}
 
-repository: https://github.com/example/eda-jira
+# The URL of the originating SCM repository
+repository: https://github.com/redhat-iberia/eda
 
-documentation: https://github.com/example/eda-jira/blob/main/README.md
+# The URL to any online docs
+documentation: https://github.com/redhat-iberia/eda/blob/main/README.md
 
+# The URL to the homepage of the collection/project
 homepage: https://www.atlassian.com/software/jira
 
-issues: https://github.com/example/eda-jira/issues
+# The URL to the collection issue tracker
+issues: https://github.com/redhat-iberia/eda/issues
 
+# A list of file glob-like patterns used to filter any files or directories that should not be included in the build
+# artifact. A pattern is matched from the relative path of the file or directory of the collection directory. This
+# uses 'fnmatch' to match the files or directories. Some directories and files like 'galaxy.yml', '*.pyc', '*.retry',
+# and '.git' are always filtered. Mutually exclusive with 'manifest'
 build_ignore:
   - '*.github'
   - 'tox.ini'
+  - 'collections'
+  - 'decision-environment'
+  - '.ruff_cache'
+  - '.pytest_cache'
+  - '.tox'
+  - '.ansible'

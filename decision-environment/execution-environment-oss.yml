@@ -11,5 +11,5 @@ dependencies:
 
 additional_build_steps:
   append_builder:
-    - COPY . /tmp/jira.event_driven_ansible
-    - RUN ansible-galaxy collection install /tmp/jira.event_driven_ansible
+    - COPY . /tmp/redhat_iberia.eda
+    - RUN ansible-galaxy collection install /tmp/redhat_iberia.eda

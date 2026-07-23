@@ -1,4 +1,4 @@
-"""Integration tests for jira_webhook.py."""
+"""Integration tests for jira.py."""
 import asyncio
 import hashlib
 import hmac
@@ -10,7 +10,7 @@ import aiohttp
 # pylint: disable-next=import-error
 import pytest
 
-from extensions.eda.plugins.event_source.jira_webhook import main as jira_webhook
+from extensions.eda.plugins.event_source.jira import main as jira_source
 
 args = {
     "host": "127.0.0.1",
@@ -34,7 +34,7 @@ headers = {"X-Hub-Signature": signature, "Content-Type": "application/json"}
 
 async def run_webhook() -> None:
     """Start webhook."""
-    await jira_webhook(asyncio.Queue(), args)
+    await jira_source(asyncio.Queue(), args)
 
 
 async def wait_for_server() -> None:

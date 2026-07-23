@@ -1,5 +1,5 @@
 
-"""Jira Webhook Event Source Plugin for Ansible EDA.
+"""Jira Event Source Plugin for Ansible EDA (redhat_iberia.eda.jira).
 
 This plugin listens for incoming HTTP webhook events from Jira Cloud
 or Jira Data Center.
@@ -17,7 +17,7 @@ from aiohttp import web
 
 DOCUMENTATION = r"""
 ---
-name: jira_webhook.py
+name: jira.py
 description:
   - Event source plugin for receiving webhook events from Jira.
     The payload must be a valid JSON object as sent by Jira webhooks.
@@ -47,7 +47,7 @@ EXAMPLES = r"""
 - name: Watch for Jira webhook events
   hosts: localhost
   sources:
-    - jira.event_driven_ansible.jira_webhook:
+    - redhat_iberia.eda.jira:
         host: 0.0.0.0
         port: 5000
         path: /webhook
@@ -257,7 +257,7 @@ async def main(queue: asyncio.Queue, args: dict[str, Any]) -> None:
 
     """
     _initialize_logger_config()
-    logger.info("Starting jira_webhook...")
+    logger.info("Starting jira webhook source...")
 
     app_attrs = _set_app_attributes(args)
     middlewares = []
@@ -288,7 +288,7 @@ async def main(queue: asyncio.Queue, args: dict[str, Any]) -> None:
     )
     await site.start()
     logger.info(
-        "jira_webhook is running on %s:%s%s",
+        "jira source is running on %s:%s%s",
         app_attrs["host"],
         app_attrs["port"],
         app_attrs["path"],
@@ -297,6 +297,6 @@ async def main(queue: asyncio.Queue, args: dict[str, Any]) -> None:
     try:
         await asyncio.Future()
     except asyncio.CancelledError:
-        logger.info("jira_webhook plugin stopped")
+        logger.info("jira source plugin stopped")
     finally:
         await runner.cleanup()
