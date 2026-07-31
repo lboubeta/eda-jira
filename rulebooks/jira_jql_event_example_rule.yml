@@ -6,7 +6,7 @@
         jira_url: "https://lboubeta.atlassian.net"
         jira_user: "lboubeta@redhat.com"
         jira_token: '{{ jira_api_token }}'
-        jql: 'space = "ansible" AND status = "Waiting for support"'
+        jql: 'project = AAP AND status = "Waiting for support"'
         delay: 15
 
   rules:
