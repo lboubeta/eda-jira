@@ -6,8 +6,8 @@
         jira_url: "https://lboubeta.atlassian.net"
         jira_user: "lboubeta@redhat.com"
         jira_token: '{{ jira_api_token }}'
-        jql: 'project = ansible AND status != "To Do"'
-        delay: 60
+        jql: 'space = "ansible" AND status = "Waiting for support"'
+        delay: 15
 
   rules:
     - name: Auto-assign highest priority bugs
