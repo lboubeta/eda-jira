@@ -121,7 +121,7 @@ async def search_issues(
 
     """
     timeout = aiohttp.ClientTimeout(total=30)
-    url = f"{jira_url.rstrip('/')}/rest/api/3/search"
+    url = f"{jira_url.rstrip('/')}/rest/api/3/search/jql"
     body = {
         "jql": jql,
         "fields": [field.strip() for field in fields.split(",") if field.strip()],
