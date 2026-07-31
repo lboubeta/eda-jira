@@ -10,8 +10,8 @@
         delay: 15
 
   rules:
-    - name: Auto-assign highest priority bugs
-      condition: event.fields.priority.name == "Highest"
+    - name: Search for new opened tickets
+      condition: event.fields.status == "Waiting for support"
       action:
         debug:
-          msg: "Highest priority bug found: {{ event.fields.summary }}"
+          msg: "New opened tickets found: {{ event.fields.summary }}"
