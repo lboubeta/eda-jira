@@ -6,12 +6,12 @@
         jira_url: "https://lboubeta.atlassian.net"
         jira_user: "lboubeta@redhat.com"
         jira_token: '{{ jira_api_token }}'
-        jql: 'project = AAP AND status = "Waiting for support"'
-        delay: 15
+        jql: 'project = AAP'
+        delay: 60
 
   rules:
     - name: Search for new opened tickets
       condition: event.fields.status == "Waiting for support"
       action:
         debug:
-          msg: "New opened tickets found: {{ event.fields.summary }}"
+          msg: "New opened tickets found: {{ event }}"
