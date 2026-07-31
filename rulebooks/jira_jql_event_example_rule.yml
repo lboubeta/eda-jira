@@ -10,8 +10,8 @@
         delay: 60
 
   rules:
-    - name: Search for new opened tickets
-      condition: event.fields.status == "Waiting for support"
+    - name: Debug every issue returned by JQL search
+      condition: event.key is defined
       action:
         debug:
-          msg: "New opened tickets found: {{ event }}"
+          msg: "Jira issue from search: {{ event }}"

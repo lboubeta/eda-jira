@@ -189,6 +189,7 @@ async def main(queue: asyncio.Queue, args: dict[str, Any]) -> None:
                 fields,
                 proxy,
             )
+            new_events = 0
             for issue in issues:
                 event_key = _issue_event_key(issue)
                 if event_key in seen_issues:
@@ -197,8 +198,16 @@ async def main(queue: asyncio.Queue, args: dict[str, Any]) -> None:
 
                 await queue.put(issue)
                 seen_issues.add(event_key)
+                new_events += 1
                 logger.info("Sent issue %s to EDA queue", issue.get("key"))
 
+            logger.info(
+                "Poll done: found %d issue(s), sent %d new event(s); "
+                "next poll in %ds",
+                len(issues),
+                new_events,
+                delay,
+            )
             await asyncio.sleep(delay)
     except (asyncio.TimeoutError, asyncio.CancelledError):
         logger.exception("Jira polling task timed out or was cancelled")
