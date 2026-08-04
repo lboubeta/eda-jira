@@ -1,10 +1,18 @@
 ---
+# Local smoke-test helper (no Jira API calls). Prefer close_jira_issue.yml in AAP.
 - name: Local event-driven-ansible test
   hosts: localhost
+  gather_facts: false
   tasks:
-    - name: Print Jira event
+    - name: Print Jira JQL / webhook event
       ansible.builtin.debug:
-        msg: "{{ ansible_eda.event.payload }}"
-    - name: Resolve issue from webhook event
+        var: ansible_eda.event
+
+    - name: Resolve issue key from event
       ansible.builtin.debug:
-        msg: "Process issue {{ ansible_eda.event.payload.issue.key }}"
+        msg: >-
+          Process issue
+          {{ ansible_eda.event.key
+             | default(ansible_eda.event.issue.key, true)
+             | default(ansible_eda.event.payload.issue.key, true)
+             | default('unknown') }}
