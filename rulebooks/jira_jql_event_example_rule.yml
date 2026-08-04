@@ -11,7 +11,7 @@
 
   rules:
     - name: Debug every issue returned by JQL search
-      condition: event.key is defined
+      condition: true
       action:
         debug:
           msg: "Jira issue from search: {{ event }}"
