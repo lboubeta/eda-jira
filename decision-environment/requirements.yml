@@ -2,7 +2,6 @@
 # After publishing to Galaxy, install from Automation Hub instead of copying
 # the local collection source in execution-environment.yml:
 #
-# collections:
-#   - name: redhat_iberia.eda
-#     version: ">=1.0.0"
-collections: []
+collections:
+  - name: redhat_iberia.eda
+    version: ">=1.0.4"
