@@ -1,17 +1,19 @@
 ---
-- name: Poll Jira for open bugs
+- name: Poll Jira for all request types
   hosts: all
   sources:
     - redhat_iberia.eda.jira_jql:
         jira_url: "https://lboubeta.atlassian.net"
         jira_user: "lboubeta@redhat.com"
         jira_token: '{{ jira_api_token }}'
-        jql: 'project = AAP'
-        delay: 60
+        # No issuetype filter — include bugs, stories, service requests, etc.
+        jql: 'project = AAP ORDER BY updated DESC'
+        fields: "summary,status,priority,assignee,project,issuetype,updated,created"
+        delay: 15
 
   rules:
-    - name: Debug every issue returned by JQL search
+    - name: Log every Jira issue returned by JQL search
       condition: true
       action:
         debug:
-          msg: "Jira issue from search: {{ event }}"
+          msg: "Jira {{ event.key }} type={{ event.fields.issuetype.name }} status={{ event.fields.status.name }} summary={{ event.fields.summary }} payload={{ event }}"
