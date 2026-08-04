@@ -1,19 +1,28 @@
 ---
-- name: Poll Jira for all request types
+- name: Poll Jira and close open requests
   hosts: all
   sources:
     - redhat_iberia.eda.jira_jql:
         jira_url: "https://lboubeta.atlassian.net"
         jira_user: "lboubeta@redhat.com"
         jira_token: '{{ jira_api_token }}'
-        # No issuetype filter — include bugs, stories, service requests, etc.
-        jql: 'project = AAP ORDER BY updated DESC'
+        # Only open issues/requests (any type: service request, bug, ...)
+        jql: 'project = AAP AND statusCategory != Done ORDER BY updated DESC'
         fields: "summary,status,priority,assignee,project,issuetype,updated,created"
         delay: 15
 
   rules:
-    - name: Log every Jira issue returned by JQL search
-      condition: true
+    - name: Close open Jira service requests and issues
+      # Fire for every non-done issue from the poll.
+      condition: >
+        event.key is defined and
+        event.fields.status.statusCategory.key != "done"
       action:
-        debug:
-          msg: "Jira {{ event.key }} type={{ event.fields.issuetype.name }} status={{ event.fields.status.name }} summary={{ event.fields.summary }} payload={{ event }}"
+        run_job_template:
+          name: "Close Jira issue"
+          organization: "Default"
+          job_args:
+            extra_vars:
+              jira_url: "https://lboubeta.atlassian.net"
+              jira_user: "lboubeta@redhat.com"
+              jira_token: '{{ jira_api_token }}'

@@ -1,0 +1,140 @@
+---
+# Close a Jira issue/request from an EDA event (AAP Job Template).
+#
+# Create an AAP Job Template named "Close Jira issue" that runs this playbook.
+# Attach extra vars or a credential providing:
+#   jira_url, jira_user, jira_token
+#
+# Optional extra vars:
+#   jira_issue_key          - override (default: ansible_eda.event.key)
+#   jira_close_transition   - exact transition name (e.g. "Done")
+#   jira_close_comment      - comment added on close
+#
+- name: Close Jira issue
+  hosts: localhost
+  gather_facts: false
+  vars:
+    issue_key: >-
+      {{ ansible_eda.event.key
+         | default(ansible_eda.event.issue.key, true)
+         | default(jira_issue_key, true)
+         | default('') }}
+    close_comment: >-
+      {{ jira_close_comment
+         | default('Closed automatically by Ansible Automation Platform (EDA).') }}
+    close_transition_candidates:
+      - "{{ jira_close_transition | default('') }}"
+      - Done
+      - Close
+      - Closed
+      - Resolve
+      - Resolved
+      - Resolve this request
+      - Close request
+      - Cancel request
+
+  tasks:
+    - name: Validate required variables
+      ansible.builtin.assert:
+        that:
+          - jira_url is defined and (jira_url | length > 0)
+          - jira_user is defined and (jira_user | length > 0)
+          - jira_token is defined and (jira_token | length > 0)
+          - issue_key | length > 0
+        fail_msg: >-
+          jira_url, jira_user, jira_token and issue key are required.
+          ansible_eda.event.key={{ ansible_eda.event.key | default('missing') }}
+
+    - name: Show issue that will be closed
+      ansible.builtin.debug:
+        msg: >-
+          Closing {{ issue_key }}
+          (type={{ ansible_eda.event.fields.issuetype.name | default('n/a') }},
+          status={{ ansible_eda.event.fields.status.name | default('n/a') }},
+          summary={{ ansible_eda.event.fields.summary | default('n/a') }})
+
+    - name: Get available transitions for issue
+      ansible.builtin.uri:
+        url: "{{ jira_url.rstrip('/') }}/rest/api/3/issue/{{ issue_key }}/transitions"
+        method: GET
+        user: "{{ jira_user }}"
+        password: "{{ jira_token }}"
+        force_basic_auth: true
+        status_code: [200]
+        headers:
+          Accept: application/json
+      register: jira_transitions
+      no_log: true
+
+    - name: Build map of transition name to id
+      ansible.builtin.set_fact:
+        jira_transition_map: >-
+          {{
+            dict(
+              (jira_transitions.json.transitions | default([]))
+              | map(attribute='name')
+              | list
+              | zip(
+                  (jira_transitions.json.transitions | default([]))
+                  | map(attribute='id')
+                  | list
+                )
+            )
+          }}
+
+    - name: List available transitions
+      ansible.builtin.debug:
+        var: jira_transition_map
+
+    - name: Select close transition id
+      ansible.builtin.set_fact:
+        selected_transition_name: "{{ item }}"
+        selected_transition_id: "{{ jira_transition_map[item] }}"
+      loop: "{{ close_transition_candidates | select('string') | reject('equalto', '') | list }}"
+      when:
+        - selected_transition_id is not defined
+        - item in jira_transition_map
+      loop_control:
+        label: "{{ item }}"
+
+    - name: Fail when no close transition is available
+      ansible.builtin.fail:
+        msg: >-
+          No suitable close transition found for {{ issue_key }}.
+          Available: {{ jira_transition_map.keys() | list }}.
+          Set jira_close_transition to one of those names.
+      when: selected_transition_id is not defined
+
+    - name: Transition issue to closed/done
+      ansible.builtin.uri:
+        url: "{{ jira_url.rstrip('/') }}/rest/api/3/issue/{{ issue_key }}/transitions"
+        method: POST
+        user: "{{ jira_user }}"
+        password: "{{ jira_token }}"
+        force_basic_auth: true
+        status_code: [204]
+        headers:
+          Accept: application/json
+          Content-Type: application/json
+        body_format: json
+        body:
+          transition:
+            id: "{{ selected_transition_id }}"
+          update:
+            comment:
+              - add:
+                  body:
+                    type: doc
+                    version: 1
+                    content:
+                      - type: paragraph
+                        content:
+                          - type: text
+                            text: "{{ close_comment }}"
+      no_log: true
+
+    - name: Confirm issue closed
+      ansible.builtin.debug:
+        msg: >-
+          Issue {{ issue_key }} transitioned with
+          '{{ selected_transition_name }}' (id={{ selected_transition_id }})
